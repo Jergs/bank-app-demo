@@ -3,9 +3,18 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-mvnw
+
+### Maven ###
+/.mvn/
+/mvnw
+/mvnw.bat
 mvnw.cmd
-mobile-bank-demo.iml
+/log/
+*.log*
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
 
 ### STS ###
 .apt_generated
