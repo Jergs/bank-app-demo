@@ -2,17 +2,14 @@ package com.havryliuk.yehor.mobilebankdemo.mapper;
 
 import com.havryliuk.yehor.mobilebankdemo.model.entity.Customer;
 import com.havryliuk.yehor.mobilebankdemo.model.request.NewCustomerRequest;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CustomerMapper {
+@Mapper
+public interface CustomerMapper {
 
-    public static Customer toCustomer(NewCustomerRequest request) {
-        return Customer.builder()
-                .email(request.getEmail())
-                .pwd(request.getPwd())
-                .role(request.getRole())
-                .build();
-    }
+    CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
+
+    Customer map(NewCustomerRequest request);
+
 }

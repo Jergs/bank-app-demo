@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public void registerUser(NewCustomerRequest request) {
         log.debug("Register new user request: {}", request);
-        Customer customer = CustomerMapper.toCustomer(request);
+        Customer customer = CustomerMapper.INSTANCE.map(request);
         var savedCustomer = repository.save(customer);
         log.debug("Saved new user: {}", savedCustomer);
     }
