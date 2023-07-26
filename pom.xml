@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.havryliuk.yehor</groupId>
-    <artifactId>mobile-bank-demo</artifactId>
+    <artifactId>bank-app-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mobile-bank-demo</name>
-    <description>mobile-bank-demo</description>
+    <name>bank-app-demo</name>
+    <description>bank-app-demo</description>
 
     <properties>
         <java.version>17</java.version>
