@@ -7,11 +7,12 @@ import com.havryliuk.yehor.bank.app.demo.repository.CustomerRepository;
 import com.havryliuk.yehor.bank.app.demo.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public void registerUser(NewCustomerRequest request) {
         log.debug("Register new user request: {}", request);
-        List<Customer> customerByEmail = repository.findByEmail(request.getEmail());
-        if (!customerByEmail.isEmpty()) {
+        Optional<Customer> customerOptional = repository.findByEmail(request.getEmail());
+        if (customerOptional.isPresent()) {
             throw new IllegalArgumentException("User with this email already exists");
         }
 
@@ -33,5 +34,14 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPwd(passwordEncoder.encode(customer.getPwd()));
         var savedCustomer = repository.save(customer);
         log.debug("Saved new user: {}", savedCustomer);
+    }
+
+    public Customer findCustomerByUsername(String username) {
+        Optional<Customer> customerOptional = repository.findByEmail(username);
+        Customer customer = customerOptional.orElseThrow(
+                () -> new UsernameNotFoundException("No user with this userName found"));
+
+        log.debug("Customer found for username: {}", username);
+        return customer;
     }
 }
