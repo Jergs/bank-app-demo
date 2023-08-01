@@ -1,7 +1,7 @@
 package com.havryliuk.yehor.bank.app.demo.controller;
 
-import com.havryliuk.yehor.bank.app.demo.service.CustomerService;
 import com.havryliuk.yehor.bank.app.demo.model.request.NewCustomerRequest;
+import com.havryliuk.yehor.bank.app.demo.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,4 +20,5 @@ public class LoginController {
         customerService.registerUser(request);
         return ResponseEntity.ok().build();
     }
+    
 }

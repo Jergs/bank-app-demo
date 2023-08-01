@@ -1,10 +1,12 @@
 package com.havryliuk.yehor.bank.app.demo.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -12,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,34 +22,29 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "customers")
-public class Customer {
+@Table(name = "accounts")
+public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String accountNumber;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+    @Column(insertable = false, updatable = false, name = "customer_id")
     private Integer customerId;
-    private String name;
-    private String email;
-    private String mobileNumber;
-    private String pwd;
-    private String role;
+    private String accountType;
+    private String branchAddress;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "account")
     @ToString.Exclude
-    private List<Card> cards = new ArrayList<>();
+    private List<Transaction> accounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
-    @ToString.Exclude
-    private List<Account> accounts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "customer")
-    @ToString.Exclude
-    private List<Transaction> transactions = new ArrayList<>();
+    @OneToOne(mappedBy = "account")
+    private Balance balance;
 
     @PrePersist
     protected void onCreate() {
@@ -63,12 +59,12 @@ public class Customer {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Customer customer = (Customer) o;
-        return customerId.equals(customer.customerId);
+        Account account = (Account) o;
+        return Objects.equals(accountNumber, account.accountNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId);
+        return Objects.hash(accountNumber);
     }
 }
