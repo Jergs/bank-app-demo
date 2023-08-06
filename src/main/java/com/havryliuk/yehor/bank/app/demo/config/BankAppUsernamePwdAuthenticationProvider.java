@@ -2,6 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.config;
 
 import com.havryliuk.yehor.bank.app.demo.model.entity.Customer;
 import com.havryliuk.yehor.bank.app.demo.service.CustomerService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,8 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
