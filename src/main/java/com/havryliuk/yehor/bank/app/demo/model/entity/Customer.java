@@ -1,6 +1,7 @@
 package com.havryliuk.yehor.bank.app.demo.model.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,15 +39,15 @@ public class Customer {
     private String role;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Card> cards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Account> accounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Transaction> transactions = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 @Entity
 @Getter
@@ -29,9 +31,10 @@ import lombok.ToString;
 public class Account {
 
     @Id
-    private String accountNumber;
-    @ManyToOne
+    private Integer accountNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
+    @Exclude
     private Customer customer;
     @Column(insertable = false, updatable = false, name = "customer_id")
     private Integer customerId;
@@ -39,9 +42,9 @@ public class Account {
     private String branchAddress;
     private LocalDate createdAt;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<Transaction> accounts = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @OneToOne(mappedBy = "account")
     private Balance balance;
