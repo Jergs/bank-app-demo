@@ -19,9 +19,8 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<List<TransactionDetailsResponse>> getTransactionDetails(@RequestParam
-                                                                                  @NotNull Integer customerId) {
-        var response = transactionService.getTransactionsByCustomerId(customerId);
+    public ResponseEntity<List<TransactionDetailsResponse>> getTransactionDetails(@RequestParam @NotNull Integer id) {
+        var response = transactionService.getTransactionsByCustomerId(id);
         return ResponseEntity.ok(response);
     }
 }

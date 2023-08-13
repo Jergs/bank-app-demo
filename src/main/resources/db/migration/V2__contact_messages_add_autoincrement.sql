@@ -1,0 +1,1 @@
+ALTER TABLE db.contact_messages MODIFY contact_id int NOT NULL AUTO_INCREMENT;

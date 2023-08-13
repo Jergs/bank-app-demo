@@ -20,7 +20,7 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountDetailsResponse getAccountDetails(Integer id) {
         var account = repository.findByCustomerId(id).orElseThrow(
-            () -> new EntityNotFoundException(format("No account found by id %d", id)));
+            () -> new EntityNotFoundException(format("No account found by customer with id [%d]", id)));
         log.debug("Found account with id {}", id);
 
         return AccountMapper.INSTANCE.map(account);

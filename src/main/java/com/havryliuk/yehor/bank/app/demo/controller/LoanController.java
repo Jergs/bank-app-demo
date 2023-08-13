@@ -19,8 +19,8 @@ public class LoanController {
     private final LoanService loanService;
 
     @GetMapping
-    public ResponseEntity<List<LoanDetailsResponse>> getLoanDetails(@RequestParam @NotNull Integer customerId) {
-        var response = loanService.getLoansByCustomerId(customerId);
+    public ResponseEntity<List<LoanDetailsResponse>> getLoanDetails(@RequestParam @NotNull Integer id) {
+        var response = loanService.getLoansByCustomerId(id);
         return ResponseEntity.ok(response);
     }
 }

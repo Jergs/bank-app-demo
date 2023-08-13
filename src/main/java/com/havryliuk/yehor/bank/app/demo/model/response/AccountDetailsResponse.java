@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class AccountDetailsResponse {
 
-    private String accountNumber;
+    private Integer accountNumber;
     private Integer customerId;
     private String accountType;
     private String branchAddress;

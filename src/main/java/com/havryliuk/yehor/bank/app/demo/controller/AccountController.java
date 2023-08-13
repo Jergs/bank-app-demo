@@ -18,9 +18,8 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<AccountDetailsResponse> getAccountDetails(@RequestParam @NotNull
-                                                                    Integer customerId) {
-        var response = accountService.getAccountDetails(customerId);
+    public ResponseEntity<AccountDetailsResponse> getAccountDetails(@RequestParam @NotNull Integer id) {
+        var response = accountService.getAccountDetails(id);
         return ResponseEntity.ok(response);
     }
 }

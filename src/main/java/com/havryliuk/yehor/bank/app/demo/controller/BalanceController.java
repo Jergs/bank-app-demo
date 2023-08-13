@@ -1,9 +1,8 @@
 package com.havryliuk.yehor.bank.app.demo.controller;
 
-import com.havryliuk.yehor.bank.app.demo.model.response.CardDetailsResponse;
-import com.havryliuk.yehor.bank.app.demo.service.CardService;
+import com.havryliuk.yehor.bank.app.demo.model.response.BalanceDetailsResponse;
+import com.havryliuk.yehor.bank.app.demo.service.BalanceService;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cards")
 @RequiredArgsConstructor
-public class CardController {
+@RequestMapping("/balances")
+public class BalanceController {
 
-    private final CardService cardService;
+    private final BalanceService balanceService;
 
     @GetMapping
-    public ResponseEntity<List<CardDetailsResponse>> getCardDetails(@RequestParam @NotNull
-                                                                    Integer id) {
-        var response = cardService.getCardsByCustomerId(id);
+    public ResponseEntity<BalanceDetailsResponse> getBalanceDetails(@RequestParam @NotNull Integer accountNumber) {
+        var response = balanceService.getBalanceByAccountNumber(accountNumber);
         return ResponseEntity.ok(response);
     }
 }
