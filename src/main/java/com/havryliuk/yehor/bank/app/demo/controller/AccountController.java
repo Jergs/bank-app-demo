@@ -5,6 +5,7 @@ import com.havryliuk.yehor.bank.app.demo.service.AccountService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
+    @Secured("ROLE_USER")
     public ResponseEntity<AccountDetailsResponse> getAccountDetails(@RequestParam @NotNull Integer id) {
         var response = accountService.getAccountDetails(id);
         return ResponseEntity.ok(response);

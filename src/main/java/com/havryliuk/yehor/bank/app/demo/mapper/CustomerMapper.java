@@ -14,7 +14,6 @@ public interface CustomerMapper {
 
     Customer map(NewCustomerRequest request);
 
-    @Mapping(source = "pwd", target = "password")
     @Mapping(source = "customerId", target = "id")
     CustomerDetailsResponse map(Customer customer);
 

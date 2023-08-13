@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public Customer findCustomerByUsername(String username) {
-        Optional<Customer> customerOptional = repository.findByEmail(username);
+        Optional<Customer> customerOptional = repository.findByEmailWithAuthorities(username);
         Customer customer = customerOptional.orElseThrow(
             () -> new UsernameNotFoundException("No user with this userName found"));
 

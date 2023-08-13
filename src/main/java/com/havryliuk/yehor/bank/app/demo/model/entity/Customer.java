@@ -10,8 +10,10 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,6 +52,10 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Transaction> transactions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Authority> authorities = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

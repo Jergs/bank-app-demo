@@ -5,6 +5,7 @@ import com.havryliuk.yehor.bank.app.demo.service.BalanceService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ public class BalanceController {
     private final BalanceService balanceService;
 
     @GetMapping
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<BalanceDetailsResponse> getBalanceDetails(@RequestParam @NotNull Integer accountNumber) {
         var response = balanceService.getBalanceByAccountNumber(accountNumber);
         return ResponseEntity.ok(response);
