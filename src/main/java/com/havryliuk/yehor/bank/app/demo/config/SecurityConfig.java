@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -26,22 +28,17 @@ public class SecurityConfig {
         csrfHandler.setCsrfRequestAttributeName("_csrf");
 
         http.securityContext(context -> context.requireExplicitSave(false))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            // without the above 2 lines user will need to send creds every time
-            .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                // without the above 2 lines user will need to send creds every time
+                .cors(Customizer.withDefaults())
 
-            .csrf(csrf -> csrf.csrfTokenRequestHandler(csrfHandler)
-                .ignoringRequestMatchers("/contacts", "register")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-            .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .csrf(csrf -> csrf.csrfTokenRequestHandler(csrfHandler)
+                        .ignoringRequestMatchers("/contacts", "/register")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
 
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/accounts", "/balances", "/loans",
-                    "/cards", "/transactions", "/customers", "/balances").authenticated()
-                .requestMatchers("/notices", "/contacts", "/register").permitAll())
-
-            .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

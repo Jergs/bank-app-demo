@@ -1,8 +1,10 @@
 package com.havryliuk.yehor.bank.app.demo.config;
 
+import com.havryliuk.yehor.bank.app.demo.model.entity.Authority;
 import com.havryliuk.yehor.bank.app.demo.model.entity.Customer;
 import com.havryliuk.yehor.bank.app.demo.service.CustomerService;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,11 +31,17 @@ public class BankAppUsernamePwdAuthenticationProvider implements AuthenticationP
         Customer customer = customerService.findCustomerByUsername(username);
 
         if (passwordEncoder.matches(password, customer.getPwd())) {
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(customer.getRole()));
-            return new UsernamePasswordAuthenticationToken(username, password, authorities);
+            return new UsernamePasswordAuthenticationToken(username, password,
+                    getAuthorities(customer.getAuthorities()));
         } else {
             throw new BadCredentialsException("Invalid password");
         }
+    }
+
+    private List<GrantedAuthority> getAuthorities(Set<Authority> authorities) {
+        return authorities.stream()
+                .map(authority -> (GrantedAuthority) new SimpleGrantedAuthority(authority.getName()))
+                .toList();
     }
 
     @Override

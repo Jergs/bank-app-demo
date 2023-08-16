@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ public class LoanController {
     private final LoanService loanService;
 
     @GetMapping
+    @Secured("ROLE_USER")
     public ResponseEntity<List<LoanDetailsResponse>> getLoanDetails(@RequestParam @NotNull Integer id) {
         var response = loanService.getLoansByCustomerId(id);
         return ResponseEntity.ok(response);
