@@ -1,6 +1,10 @@
 package com.havryliuk.yehor.bank.app.demo.config;
 
 import com.havryliuk.yehor.bank.app.demo.filter.CsrfCookieFilter;
+import com.havryliuk.yehor.bank.app.demo.filter.JwtTokenGeneratorFilter;
+import com.havryliuk.yehor.bank.app.demo.filter.JwtTokenValidationFilter;
+import com.havryliuk.yehor.bank.app.demo.filter.LoggingAfterFilter;
+import com.havryliuk.yehor.bank.app.demo.filter.RequestValidationBeforeFilter;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,15 +31,16 @@ public class SecurityConfig {
         CsrfTokenRequestAttributeHandler csrfHandler = new CsrfTokenRequestAttributeHandler();
         csrfHandler.setCsrfRequestAttributeName("_csrf");
 
-        http.securityContext(context -> context.requireExplicitSave(false))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                // without the above 2 lines user will need to send creds every time
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
-
                 .csrf(csrf -> csrf.csrfTokenRequestHandler(csrfHandler)
                         .ignoringRequestMatchers("/contacts", "/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new LoggingAfterFilter(), CsrfCookieFilter.class)
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidationFilter(), BasicAuthenticationFilter.class)
 
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
@@ -50,6 +55,7 @@ public class SecurityConfig {
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setExposedHeaders(Collections.singletonList("Authorization"));
         config.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
