@@ -12,6 +12,7 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContactDetailsDto {
 
+    private Long contactId;
     @NotBlank
     private String name;
     @NotBlank

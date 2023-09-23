@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface TransactionService {
 
-    List<TransactionDetailsResponse> getTransactionsByCustomerId(Integer id);
+    List<TransactionDetailsResponse> getTransactionsByCustomerEmail(String email);
 }

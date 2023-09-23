@@ -17,8 +17,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository repository;
 
-    public List<TransactionDetailsResponse> getTransactionsByCustomerId(Integer id) {
-        var transactions = repository.findByCustomerIdOrderByDateDesc(id);
+    public List<TransactionDetailsResponse> getTransactionsByCustomerEmail(String email) {
+        var transactions = repository.findByEmailOrderByStartDateDesc(email);
         log.debug("Found transactions with ids {}", transactions.stream().map(Transaction::getTransactionId).toList());
 
         return TransactionMapper.INSTANCE.map(transactions);

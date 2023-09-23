@@ -17,8 +17,8 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository repository;
 
-    public List<CardDetailsResponse> getCardsByCustomerId(Integer id) {
-        var cards = repository.findByCustomerId(id);
+    public List<CardDetailsResponse> getCardsByCustomerEmail(String email) {
+        var cards = repository.findByEmail(email);
         log.debug("Found cards with ids {}", cards.stream().map(Card::getCardId).toList());
 
         return CardMapper.INSTANCE.map(cards);

@@ -2,7 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.controller;
 
 import com.havryliuk.yehor.bank.app.demo.model.response.AccountDetailsResponse;
 import com.havryliuk.yehor.bank.app.demo.service.AccountService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -20,8 +20,8 @@ public class AccountController {
 
     @GetMapping
     @Secured("ROLE_USER")
-    public ResponseEntity<AccountDetailsResponse> getAccountDetails(@RequestParam @NotNull Integer id) {
-        var response = accountService.getAccountDetails(id);
+    public ResponseEntity<AccountDetailsResponse> getAccountDetails(@RequestParam @NotBlank String email) {
+        var response = accountService.getAccountDetails(email);
         return ResponseEntity.ok(response);
     }
 }

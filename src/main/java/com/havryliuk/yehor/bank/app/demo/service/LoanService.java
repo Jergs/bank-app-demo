@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface LoanService {
 
-    List<LoanDetailsResponse> getLoansByCustomerId(Integer id);
+    List<LoanDetailsResponse> getLoansByCustomerEmail(String email);
 }
