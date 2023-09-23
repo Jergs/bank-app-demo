@@ -1,10 +1,6 @@
 package com.havryliuk.yehor.bank.app.demo.config;
 
 import com.havryliuk.yehor.bank.app.demo.filter.CsrfCookieFilter;
-import com.havryliuk.yehor.bank.app.demo.filter.JwtTokenGeneratorFilter;
-import com.havryliuk.yehor.bank.app.demo.filter.JwtTokenValidationFilter;
-import com.havryliuk.yehor.bank.app.demo.filter.LoggingAfterFilter;
-import com.havryliuk.yehor.bank.app.demo.filter.RequestValidationBeforeFilter;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -23,7 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -31,19 +26,27 @@ public class SecurityConfig {
         CsrfTokenRequestAttributeHandler csrfHandler = new CsrfTokenRequestAttributeHandler();
         csrfHandler.setCsrfRequestAttributeName("_csrf");
 
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
+
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.csrfTokenRequestHandler(csrfHandler)
                         .ignoringRequestMatchers("/contacts", "/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
-                .addFilterAfter(new LoggingAfterFilter(), CsrfCookieFilter.class)
-                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtTokenValidationFilter(), BasicAuthenticationFilter.class)
 
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults());
+                .authorizeHttpRequests(customizer ->
+                        customizer.requestMatchers("/accounts", "/balances", "/transactions", "/loans",
+                                        "/cards", "/customers").authenticated()
+                                .requestMatchers("/notices", "/contacts", "/register").permitAll()
+                )
+
+                .oauth2ResourceServer(jwt ->
+                        jwt.jwt(customizer ->
+                                customizer.jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                );
 
         return http.build();
     }
@@ -60,10 +63,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

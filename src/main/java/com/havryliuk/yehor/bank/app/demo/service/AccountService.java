@@ -4,5 +4,5 @@ import com.havryliuk.yehor.bank.app.demo.model.response.AccountDetailsResponse;
 
 public interface AccountService {
 
-    AccountDetailsResponse getAccountDetails(Integer id);
+    AccountDetailsResponse getAccountDetails(String email);
 }

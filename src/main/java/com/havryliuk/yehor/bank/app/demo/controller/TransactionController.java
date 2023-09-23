@@ -2,7 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.controller;
 
 import com.havryliuk.yehor.bank.app.demo.model.response.TransactionDetailsResponse;
 import com.havryliuk.yehor.bank.app.demo.service.TransactionService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<List<TransactionDetailsResponse>> getTransactionDetails(@RequestParam @NotNull Integer id) {
-        var response = transactionService.getTransactionsByCustomerId(id);
+    public ResponseEntity<List<TransactionDetailsResponse>> getTransactionDetails(@RequestParam @NotBlank String email) {
+        var response = transactionService.getTransactionsByCustomerEmail(email);
         return ResponseEntity.ok(response);
     }
 }

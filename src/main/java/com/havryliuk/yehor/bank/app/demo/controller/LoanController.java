@@ -2,7 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.controller;
 
 import com.havryliuk.yehor.bank.app.demo.model.response.LoanDetailsResponse;
 import com.havryliuk.yehor.bank.app.demo.service.LoanService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +21,8 @@ public class LoanController {
 
     @GetMapping
     @Secured("ROLE_USER")
-    public ResponseEntity<List<LoanDetailsResponse>> getLoanDetails(@RequestParam @NotNull Integer id) {
-        var response = loanService.getLoansByCustomerId(id);
+    public ResponseEntity<List<LoanDetailsResponse>> getLoanDetails(@RequestParam @NotBlank String email) {
+        var response = loanService.getLoansByCustomerEmail(email);
         return ResponseEntity.ok(response);
     }
 }

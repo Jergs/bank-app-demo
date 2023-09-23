@@ -17,8 +17,8 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository repository;
 
-    public List<LoanDetailsResponse> getLoansByCustomerId(Integer id) {
-        var loans = repository.findByCustomerIdOrderByStartDateDesc(id);
+    public List<LoanDetailsResponse> getLoansByCustomerEmail(String email) {
+        var loans = repository.findByEmailOrderByStartDateDesc(email);
         log.debug("Found loans with numbers {}", loans.stream().map(Loan::getLoanNumber).toList());
 
         return LoanMapper.INSTANCE.map(loans);

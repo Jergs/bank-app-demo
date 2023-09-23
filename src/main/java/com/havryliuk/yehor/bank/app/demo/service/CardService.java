@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface CardService {
 
-    List<CardDetailsResponse> getCardsByCustomerId(Integer id);
+    List<CardDetailsResponse> getCardsByCustomerEmail(String email);
 }

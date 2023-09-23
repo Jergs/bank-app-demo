@@ -2,7 +2,7 @@ package com.havryliuk.yehor.bank.app.demo.controller;
 
 import com.havryliuk.yehor.bank.app.demo.model.response.CardDetailsResponse;
 import com.havryliuk.yehor.bank.app.demo.service.CardService;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,8 @@ public class CardController {
 
     @GetMapping
     @Secured("ROLE_USER")
-    public ResponseEntity<List<CardDetailsResponse>> getCardDetails(@RequestParam @NotNull
-                                                                    Integer id) {
-        var response = cardService.getCardsByCustomerId(id);
+    public ResponseEntity<List<CardDetailsResponse>> getCardDetails(@RequestParam @NotBlank String email) {
+        var response = cardService.getCardsByCustomerEmail(email);
         return ResponseEntity.ok(response);
     }
 }

@@ -14,7 +14,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex) {
         ErrorResponse bodyOfResponse = new ErrorResponse(400,
-            "Conflict passing arguments", ex.getLocalizedMessage());
+                "Conflict passing arguments", ex.getLocalizedMessage());
 
         return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
@@ -22,16 +22,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<Object> handleAny(RuntimeException ex) {
         ErrorResponse bodyOfResponse = new ErrorResponse(500,
-            "Server error occurred", ex.getLocalizedMessage());
+                "Server error occurred", ex.getLocalizedMessage());
 
-        return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(),
-            HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDeniedException(RuntimeException ex) {
         ErrorResponse bodyOfResponse = new ErrorResponse(403, "Access denied",
-            ex.getLocalizedMessage());
+                ex.getLocalizedMessage());
         return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<Object> handleNotFound(RuntimeException ex) {
+        ErrorResponse bodyOfResponse = new ErrorResponse(400,
+                "Server resource not found", ex.getLocalizedMessage());
+
+        return new ResponseEntity<>(bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
